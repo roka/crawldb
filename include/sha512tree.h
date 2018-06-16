@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
-#define LEAF_LEFT 1
-#define LEAF_RIGHT 2
+#define LEAF_LEFT 0
+#define LEAF_RIGHT 1
 
 struct sha512tree {
         uint64_t num;

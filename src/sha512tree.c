@@ -34,7 +34,8 @@ sha512tree *check_uchar(sha512tree *tree, unsigned char ch, int set)
         int i,bit;
 
         for (i=0; i < 8; i++) {
-                bit = CHECK_BIT(ch, i);
+                bit = CHECK_BIT(ch, i) ? 1 : 0;
+                debug_print("check_uchar(%p) = %d\n", tree, bit)
 
                 /* check if the leaf is set and update if needed */
                 if (!check_leaf(tree, bit)) {
@@ -70,6 +71,7 @@ int sha512tree_contains(sha512tree *tree, unsigned char *hexdigest)
         SHA512(hexdigest, sizeof(hexdigest) - 1, hash);
 
         for (i=0; i < SHA512_DIGEST_LENGTH-1; i++) {
+                debug_print("sha512tree_contains: check byte: %d\n", i);
                 tmp = check_uchar(tree, hash[i], 0);
 
                 if (tmp == NULL) {
@@ -85,15 +87,19 @@ int sha512tree_contains(sha512tree *tree, unsigned char *hexdigest)
 
 int sha512tree_add(sha512tree *tree, unsigned char *hexdigest)
 {
+        debug_print("sha512tree_add start%c", '\n');
+
         int i;
         unsigned char hash[SHA512_DIGEST_LENGTH];
 
         SHA512(hexdigest, sizeof(hexdigest) - 1, hash);
 
         for (i=0; i < SHA512_DIGEST_LENGTH-1; i++) {
-                tree = check_uchar(tree, hash[i], 0);
+                debug_print("sha512tree_add: adding byte: %d at(%p)\n", i, tree);
+                tree = check_uchar(tree, hash[i], 1);
         }
 
+        debug_print("sha512tree_add done%c", '\n');
         return 0;
 }
 
