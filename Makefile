@@ -1,5 +1,6 @@
 P=crawldb
-CFLAGS = -g -Wall -O3 -I./include
+OPENSSL = `pkg-config --cflags --libs openssl`
+CFLAGS = -g -Wall -O3 -I./include $(OPENSSL)
 LDLIBS=
 CC=gcc
 OBJECTS := $(patsubst src/%.c,obj/%.o,$(wildcard src/*.c))
